@@ -1,0 +1,21 @@
+
+
+a = set(['booklet', '4 sheets', '48 sheets', '12 sheets'])
+
+'''How to sort this set so that the output is 
+
+4 sheets,
+12 sheets,
+48 sheets,
+booklet                                       '''
+
+data = set (['booklet', '4 sheets', '48 sheets', '12 sheets', '4 sheets'])
+
+def f(x):
+    num = x.split(None, 1)[0]
+    if num.isdigit():
+        return int(num)
+        
+    return x 
+
+print sorted(data, key=f)
