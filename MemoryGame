@@ -1,0 +1,106 @@
+# implementation of card game - Memory
+
+import simplegui
+import random
+number_of_cards=16
+list_of_cards=[]
+frame_ancho=800
+frame_alto=100
+exposed=[]
+card1=number_of_cards
+card2=number_of_cards
+status=0
+turns=0
+
+# helper function to initialize globals
+def create_random_list(number):
+    global list_of_cards, exposed
+    list_of_cards=range(1,number/2+1)+ range(1,number/2+1)
+    #print list_of_cards
+    random.shuffle(list_of_cards)
+    for i in list_of_cards:
+        exposed.append(False)
+    return list_of_cards
+    
+
+
+def new_game():
+    global list_of_cards, exposed,card1,card2,status
+    turns=0
+    del list_of_cards[:]
+    del exposed[:]
+    create_random_list(number_of_cards)
+    card1=number_of_cards
+    card2=number_of_cards
+    status=0
+    pass  
+
+     
+# define event handlers
+def mouseclick(pos):
+    global card1, card2,status,turns
+    card_index= pos[0]//(frame_ancho/number_of_cards)
+    #print status
+    if status==0:      
+        card1=card_index
+        exposed[card1]=True
+        status=1
+    elif status==1:
+        if card_index!=card1 and exposed[card_index]==False:
+            card2=card_index
+            exposed[card2]=True
+            status=2          
+    elif status==2:
+        if card_index !=card1 and card_index!=card2:
+            if list_of_cards[card1]!=list_of_cards[card2]:
+                exposed[card1]=False
+                exposed[card2]=False
+            card2=number_of_cards
+            card1=card_index
+            exposed[card1]=True
+            turns=turns+1
+            message="Turns = "+str(turns)
+            label.set_text(message)
+            status=1
+    #print status, card1, card2    
+       
+            
+        
+        
+            
+            
+            
+                        
+# cards are logically 50x100 pixels in size    
+def draw(canvas):
+    ancho_carta=frame_ancho/number_of_cards
+    alto_carta=frame_alto
+    i=0
+    while i < number_of_cards:
+        if exposed[i]==True:
+            canvas.draw_polygon([(ancho_carta*i,0), (ancho_carta*(i+1),0), (ancho_carta*(i+1),alto_carta), (ancho_carta*i,alto_carta)], 5, 'White', 'Black')
+            canvas.draw_text(str(list_of_cards[i]), (ancho_carta*(i+1)-(ancho_carta/2+10), (alto_carta/2+10)), 40, 'White')
+            i=i+1
+        else:
+            canvas.draw_polygon([(ancho_carta*i,0), (ancho_carta*(i+1),0), (ancho_carta*(i+1),alto_carta), (ancho_carta*i,alto_carta)], 5, 'Blue', 'White')
+            i=i+1
+    pass
+
+
+# create frame and add a button and labels
+frame = simplegui.create_frame("Memory", frame_ancho, frame_alto)
+frame.add_button("Restart", new_game)
+label = frame.add_label("Turns = 0")
+
+# get things rolling
+new_game()
+frame.start()
+
+# register event handlers
+frame.set_mouseclick_handler(mouseclick)
+frame.set_draw_handler(draw)
+
+
+
+
+# Always remember to review the grading rubric
