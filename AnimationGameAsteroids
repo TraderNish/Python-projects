@@ -11,13 +11,16 @@ lives = 3
 time = 0
 started = False
 
-rocks = 12
-STARTING_LIVES = 3
-MAX_NUMBER_OF_ROCKS = 12
-ROCK_VELOCITY_INCREASER = 0.05
-ANGULAR_VELOCITY_SPEED = 0.1
+#Ship
+Angular_Velocity_Speed = 0.1
 THRUST_SPEED = 0.2
-COEFFICIENT_OF_FRICTION = 0.99
+Coefficient_of_Friction = 0.99
+
+#Rocks
+rocks = 12
+Initial_Lives = 3
+MaxRocks = 12
+Rock_Velocity_Increase = 0.05
 
 class ImageInfo:
     def __init__(self, center, size, radius = 0, lifespan = None, animated = False):
@@ -126,8 +129,8 @@ class Ship:
             self.vel[0] += acc[0] * THRUST_SPEED
             self.vel[1] += acc[1] * THRUST_SPEED
         
-        self.vel[0] *= COEFFICIENT_OF_FRICTION
-        self.vel[1] *= COEFFICIENT_OF_FRICTION
+        self.vel[0] *= Coefficient_of_Friction
+        self.vel[1] *= Coefficient_of_Friction
     
     def set_thrust(self, on):
         self.thrust = on
@@ -144,10 +147,10 @@ class Ship:
         return self.radius
     
     def increment_angle_vel(self):
-        self.angle_vel += ANGULAR_VELOCITY_SPEED
+        self.angle_vel += Angular_Velocity_Speed
     
     def decrement_angle_vel(self):
-        self.angle_vel -= ANGULAR_VELOCITY_SPEED
+        self.angle_vel -= Angular_Velocity_Speed
     
     def shoot(self):
         forward = angle_to_vector(self.angle)
@@ -235,8 +238,8 @@ def click(pos):
     inheight = (center[1] - size[1] / 2) < pos[1] < (center[1] + size[1] / 2)
     if (not started) and inwidth and inheight:
         started = True
-        rocks = MAX_NUMBER_OF_ROCKS
-        lives = STARTING_LIVES
+        rocks = MaxRocks
+        lives = Initial_Lives
         score = 0
         soundtrack.rewind()
         soundtrack.play()
@@ -286,7 +289,7 @@ def rock_spawner():
     if len(rock_group) < rocks:
         rock_pos = [random.randrange(0, WIDTH), random.randrange(0, HEIGHT)]
         #rock_vel = [random.random() * .6 - .3, random.random() * .6 - .3]
-        rock_vel = [random.random() * (.6 + ROCK_VELOCITY_INCREASER * score) - (.3 + ROCK_VELOCITY_INCREASER * score), random.random() * (.6 + ROCK_VELOCITY_INCREASER * score) - (.3 + ROCK_VELOCITY_INCREASER * score)]
+        rock_vel = [random.random() * (.6 + Rock_Velocity_Increase * score) - (.3 + Rock_Velocity_Increase * score), random.random() * (.6 + Rock_Velocity_Increase * score) - (.3 + Rock_Velocity_Increase * score)]
         rock_avel = random.random() * .2 - .1
         a_rock = Sprite(rock_pos, rock_vel, 0, rock_avel, asteroid_image, asteroid_info)
         if a_rock.collide(my_ship):
