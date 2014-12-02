@@ -324,7 +324,7 @@ def group_group_collide(first_group, second_group):
     return collide_count
 
 # initialize stuff
-frame = simplegui.create_frame("Asteroids", WIDTH, HEIGHT)
+frame = simplegui.create_frame("Play Asteroids", WIDTH, HEIGHT)
 
 # initialize ship and two sprites
 my_ship = Ship([WIDTH / 2, HEIGHT / 2], [0, 0], 0, ship_image, ship_info)
